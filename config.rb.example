@@ -1,0 +1,46 @@
+# frozen_string_literal: true
+# -*- mode: ruby -*-
+#
+# WAP - give your guests WiFi Access, Printed
+# Copyright (C) 2021 Georg Gadinger <nilsding@nilsding.org>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# This is an example configuration for WAP
+module Config
+  PRINTER_CONNECT_USING = :usb # or: :tcp
+
+  PRINTER_HOST = '192.168.1.100'
+  PRINTER_PORT = 9100
+  PRINTER_USB = '/dev/usb/lp1' # needs to be read- and writable by your user
+
+  GUEST_USER_PREFIX = "guest-"
+  GUEST_USER_VALIDITY = 86400 # 1 day in second
+
+  CLEANUP_INTERVAL = 900 # 15 minutes
+
+  HEADER = 'WiFi @ Home'
+  HEADER_IMAGE = File.expand_path('./data/fox.png', __dir__)
+
+  SSID = 'It Hz when IP x--DDDD'
+  FORTUNE_COMMAND = lambda do
+    `fortune -s computers | cowsay -f /home/foxy/.local/share/cows/fox.cow`
+  end
+
+  UNIFI_URL = '192.168.1.254:8443'
+  UNIFI_SITE = 'default'
+  # Please create a different user to use with this thing.
+  UNIFI_USERNAME = 'SysAdmin'
+  UNIFI_PASSWORD = 'testtest'
+end

@@ -1,0 +1,32 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    amazing_print (1.2.2)
+    chunky_png (1.4.0)
+    escpos (0.0.10)
+    escpos-image (0.0.11)
+      escpos (>= 0.0.10)
+    httparty (0.18.1)
+      mime-types (~> 3.0)
+      multi_xml (>= 0.5.2)
+    mime-types (3.3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2020.1104)
+    multi_xml (0.6.0)
+    receptacle (1.0.0)
+    unifi_gem (0.2.3)
+      httparty (~> 0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  amazing_print (~> 1.2)
+  chunky_png (~> 1.4)
+  escpos (~> 0.0.10)
+  escpos-image (~> 0.0.11)
+  receptacle (~> 1.0)
+  unifi_gem
+
+BUNDLED WITH
+   2.1.4
