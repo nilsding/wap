@@ -33,6 +33,9 @@ module Config
   HEADER = 'WiFi @ Home'
   HEADER_IMAGE = File.expand_path('./data/fox.png', __dir__)
 
+  # set this to nil to hide the CA message
+  ROOT_CA_URL = 'https://somewhere.fox/rootca.crt'
+
   SSID = 'It Hz when IP x--DDDD'
   FORTUNE_COMMAND = lambda do
     `fortune -s computers | cowsay -f /home/foxy/.local/share/cows/fox.cow`

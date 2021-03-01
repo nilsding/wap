@@ -152,6 +152,15 @@ module WAP
       @printer << "\n    Password: "
       @printer << Escpos::Helpers.bold(password.dup)
       @printer << "\n\nThese credentials are valid for 1 day.\n"
+      if Config::ROOT_CA_URL
+        @printer << "\nIf you are prompted for a certificate \nupon connecting, you can download it from:"
+        @printer << "\n"
+        @printer << Escpos::Helpers.underline(Config::ROOT_CA_URL)
+        @printer << "\nor scan this QR code:"
+        @printer << "\n\n"
+        @printer << Escpos.sequence(Escpos::TXT_ALIGN_CT)
+        @printer << qrcode(Config::ROOT_CA_URL)
+      end
       if false
         # Unfortunately QR codes do not work with WPA-Enterprise ...
         @printer << "Too lazy to type all of that in?  Try out this\nspicy QR code:\n"
