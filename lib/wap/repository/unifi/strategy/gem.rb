@@ -78,6 +78,42 @@ module WAP
               .map { |obj| { id: obj.fetch('_id'), username: obj.fetch('name')} }
           end
 
+          def list_devices
+            client
+              .class
+              .get("/s/#{site}/stat/sta")
+              .parsed_response
+              .tap(&method(:request_ok?))
+              .then { |data| data['data'] }
+              .map do |data|
+                data.transform_keys(&:to_sym).tap do |d|
+                  d[:id] = d.delete(:_id)
+                end
+              end
+          end
+
+          # disconnects a wifi device
+          # @param mac [String] mac address of the device, in the following
+          #   format: 'aa:bb:cc:01:23:45'
+          def disconnect_wifi_device(mac:)
+            # kick-sta (reconnect) does not work here, so I need to block-sta
+            # and immediately unblock-sta the device afterwards, otherwise the
+            # client just stays connected
+            %w[block-sta unblock-sta].each do |cmd|
+              puts "#{Time.now} disconnect_wifi_device -> #{cmd} #{mac}"
+              payload = JSON.dump(
+                cmd: cmd,
+                mac: mac
+              )
+
+              client
+                .class
+                .post("/s/#{site}/cmd/stamgr", body: payload)
+                .parsed_response
+                .then(&method(:request_ok?))
+            end
+          end
+
           private
 
           RESULT_OK = { 'rc' => 'ok' }.freeze
@@ -91,7 +127,7 @@ module WAP
               password: Config::UNIFI_PASSWORD
             )
           end
-          
+
           def site
             @site ||= Config::UNIFI_SITE
           end

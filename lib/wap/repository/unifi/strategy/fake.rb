@@ -21,6 +21,8 @@ module WAP
     module Unifi
       module Strategy
         class Fake
+          CURRENT_ISH_USER = ((Time.now.to_f - 600) * 1000).to_i.to_s(36)
+
           def create_voucher(*)
             Array.new(10) { (0..9).to_a.sample.to_s }.join
           end
@@ -35,7 +37,7 @@ module WAP
 
           def list_radius_users
             [{ id: '5fecb2de59e05f0012e50d16',
-               username: 'Racc' },
+               username: 'cune' },
              { id: '5fecb40d59e05f0012e50dbb',
                username: 'foxy' },
              { id: '5ff322e259e05f0012c7b5a0',
@@ -43,7 +45,80 @@ module WAP
              { id: '5ff3298159e05f0012c7b798',
                username: 'guest-kjiobo3w' },
              { id: '5ff3298c59f--current-ish',
-               username: "guest-#{((Time.now.to_f - 600) * 1000).to_i.to_s(36)}" }]
+               username: "guest-#{CURRENT_ISH_USER}" }]
+          end
+
+          def list_devices
+            # these objects only contain a subset of what the controller
+            # returns
+            [
+              { oui: 'Raspberr',
+                id: '6000145259e05f0012837425',
+                mac: 'dc:a6:32:f7:60:3f',
+                is_wired: true,
+                name: 'Pi Hole',
+                network: 'LAN',
+                ip: '192.168.1.53' },
+              { oui: '',
+                id: '5ffb224d59e05f001277952b',
+                mac: 'ac:87:a3:6d:2a:18',
+                is_wired: false,
+                hostname: 'iPad-2',
+                essid: 'Fuchsbau',
+                network: 'LAN',
+                ip: '192.168.1.52',
+                :'1x_identity' => 'cune' },
+              { oui: '',
+                id: '5fecb58b59e05f0012e50e08',
+                mac: 'a8:60:b6:f9:85:72',
+                is_wired: false,
+                hostname: 'FuchsPhone',
+                essid: 'Fuchsbau',
+                network: 'LAN',
+                ip: '192.168.1.34',
+                :'1x_identity' => 'foxy' },
+              {
+                oui: 'AsustekC',
+                id: '5fd5106659e05f00119c1b7a',
+                mac: '88:d7:f6:28:ae:cd',
+                is_wired: false,
+                hostname: 'Megasus',
+                essid: 'Fuchsbau',
+                network: 'LAN',
+                ip: '192.168.1.142',
+                :'1x_identity' => 'guest-kiinbc7l' },
+              {
+                oui: 'Apple',
+                id: '5fd5106659e05f00119c1b7a',
+                mac: '38:c9:86:7b:d7:b3',
+                is_wired: false,
+                hostname: 'MacBook',
+                essid: 'Fuchsbau',
+                network: 'LAN',
+                ip: '192.168.1.69',
+                :'1x_identity' => 'guest-kjiobo3w' },
+              {
+                oui: 'Apple',
+                id: '5fd5106659f--current-ish',
+                mac: 'a8:20:66:3b:52:34',
+                is_wired: false,
+                hostname: 'MacBook-current',
+                essid: 'Fuchsbau',
+                network: 'LAN',
+                ip: '192.168.1.75',
+                :'1x_identity' => "guest-#{CURRENT_ISH_USER}" },
+              { oui: 'Apple',
+                id: '604a4855397ac2001237b7bf',
+                mac: '8c:85:90:41:ba:63',
+                is_wired: true,
+                hostname: 'e621',
+                name: 'e621',
+                network: 'LAN',
+                ip: '192.168.1.224' }]
+          end
+
+          def disconnect_wifi_device(mac:)
+            true
           end
         end
       end

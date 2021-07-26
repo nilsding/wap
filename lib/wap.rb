@@ -105,9 +105,17 @@ module WAP
     end
     return if users_to_delete.empty?
 
+    puts "#{Time.now} getting device list"
+    devices = Repository::Unifi.list_devices
+
     users_to_delete.each do |user|
-      puts "deleting user #{user[:username]} (created at #{Time.at(user[:username].split('-', 2)[1].to_i(36) / 1000)})"
+      puts "#{Time.now} deleting user #{user[:username]} (created at #{Time.at(user[:username].split('-', 2)[1].to_i(36) / 1000)})"
       Repository::Unifi.delete_radius_user(id: user[:id])
+
+      devices.select { |dev| dev[:'1x_identity'] == user[:username] }.each do |dev|
+        puts "#{Time.now} --> forcing reconnect of #{dev[:mac]} (online mit IP #{dev[:ip]})"
+        Repository::Unifi.disconnect_wifi_device(mac: dev[:mac])
+      end
     rescue StandardError => e
       puts "could not delete #{user[:name]}: #{e}"
     end

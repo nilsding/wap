@@ -29,6 +29,8 @@ module WAP
       mediate :create_radius_user
       mediate :delete_radius_user
       mediate :list_radius_users
+      mediate :list_devices
+      mediate :disconnect_wifi_device
 
       strategy Strategy::Gem
     end
