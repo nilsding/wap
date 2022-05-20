@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # WAP - give your guests WiFi Access, Printed
-# Copyright (C) 2021 Georg Gadinger <nilsding@nilsding.org>
+# Copyright (C) 2021, 2022 Georg Gadinger <nilsding@nilsding.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -19,9 +19,9 @@
 require 'socket'
 
 require 'amazing_print'
-require 'securerandom'
 
 require 'wap/repository/unifi'
+require 'wap/password_generator'
 
 require 'chunky_png'
 # require 'mini_magick'
@@ -133,7 +133,7 @@ module WAP
 
   def create_and_print_user
     username = generate_username
-    password = generate_password
+    password = PasswordGenerator.generate
 
     @printer << Escpos.sequence(Escpos::TXT_ALIGN_CT)
     if Repository::Unifi.strategy == Repository::Unifi::Strategy::Fake
@@ -212,10 +212,6 @@ module WAP
 
   def generate_username
     [Config::GUEST_USER_PREFIX, (Time.now.to_f * 1000).to_i.to_s(36)].join
-  end
-
-  def generate_password
-    SecureRandom.urlsafe_base64(8)
   end
 
   def generate_random_numbers
